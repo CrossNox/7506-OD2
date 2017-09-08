@@ -7,3 +7,8 @@ En este repositorio encontraras varios ejercicios resueltos de Apache Spark para
 
 ### Como reporto un error?
 * Levanta un issue explicando lo mas detalladamente posible, y si se te ocurre, alguna implementacion que corrija esos errores 
+
+## Colaboradores
+
+* [Javier Mermet](https://www.linkedin.com/in/ignacio-javier-mermet-901418143/)
+* [Nacho Raik](https://www.linkedin.com/in/ignacio-raik-56a028aa)

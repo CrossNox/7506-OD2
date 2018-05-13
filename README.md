@@ -10,5 +10,5 @@ En este repositorio encontraras varios ejercicios resueltos de Apache Spark para
 
 ## Colaboradores
 
-* [Javier Mermet](https://www.linkedin.com/in/ignacio-javier-mermet-901418143/)
+* [Javier Mermet](https://www.linkedin.com/in/javier-mermet)
 * [Nacho Raik](https://www.linkedin.com/in/ignacio-raik-56a028aa)

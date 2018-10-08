@@ -12,3 +12,6 @@ Para cada nuevo ejercicio, creá un nuevo branch con el formato <tema>[-<YYYY>C<
 
 ## Si no es un ejercicio de parcial:
 Ni idea, cuando haya algo lo pensamos ¯\_(ツ)_/¯
+
+## Merge a master
+Cuando hayas terminado, abrí un PR a master. Va a ser necesario que algun colaborador del repo lo revise antes de mergearlo. Puede que te pidan cambios. Una vez resueltos, debería poder mergearse, cerrar el PR (si tiene un issue asociado también) y borrar el branch.

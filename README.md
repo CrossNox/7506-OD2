@@ -5,6 +5,17 @@ El objetivo de este repositorio es juntar ejercicios resueltos de spark, pandas 
 
 Somos un grupo reducido de colaboradores. Cualquier ayuda es bienvenida. ¿Cómo podés ayudar? Subí un issue si encontrás errores, o con ejercicios que falten, si hay cosas que no queden claras. Si te animás manda un PR para corregirlo también.
 
+### Instalar las dependencias
+Usando pip:
+```
+pip install -r requirements.txt
+```
+
+Usando conda:
+```
+conda install --yes --file requirements.txt
+```
+
 ### Como envio mis resueltos?
 * Forkea el repo
 * Escribí el resuelto en un notebook que contenga el enunciado y explicaciones acordes

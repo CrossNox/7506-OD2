@@ -1,5 +1,5 @@
 Si sos colaborador, trabajá desde el repo (preferentemente) o desde un fork. Si no sos colaborador, desde un fork.
-Para cada nuevo ejercicio, creá un nuevo branch con el formato <tema>[-<YYYY>C<N>_<chance>][-desc], donde <tema> es `spark`, `pandas` u otro si se agregara. Si es un ejercicio de parcial, completá <YYYY> con el año en que se tomó, <N> con el número de cuatri y <chance> con el numero de chance del parcial (1,2 o 3). Opcionalmente completá [-desc] con una breve descripción de lo que estás agregando, particularmente si no es un ejercicio de parcial.
+Para cada nuevo ejercicio, creá un nuevo branch con el formato \<tema\>[-\<YYYY\>C\<N\>_\<chance\>][-desc], donde \<tema\> es `spark`, `pandas` u otro si se agregara. Si es un ejercicio de parcial, completá \<YYYY\> con el año en que se tomó, \<N\> con el número de cuatri y \<chance\> con el numero de chance del parcial (1,2 o 3). Opcionalmente completá [-desc] con una breve descripción de lo que estás agregando, particularmente si no es un ejercicio de parcial.
 
 ## Si es un ejercicio de parcial, debería cumplir lo siguiente:
 * Estar en un notebook llamado como el branch

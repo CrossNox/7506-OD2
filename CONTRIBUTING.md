@@ -1,3 +1,13 @@
+## Podes colaborar con:
+
+* Soluciones alternativas a ejercicios ya hechos
+
+* Soluciones a ejercicios ya hechos pero en otra plataforma (por ejemplo, resolver un ejercicio de *spark* en *pandas*)
+
+* Nuevos ejercicios de parcial, de cualquier tema dado por la materia (no solo los presentes en el repo)
+
+* Nuevos ejercicios de guias, de cualquier tema dado por la materia (no solo los presentes en el repo)
+
 Si sos colaborador, trabajá desde el repo (preferentemente) o desde un fork. Si no sos colaborador, desde un fork.
 Para cada nuevo ejercicio, creá un nuevo branch con el formato \<tema\>[-\<YYYY\>C\<N\>_\<chance\>][-desc], donde \<tema\> es `spark`, `pandas` u otro si se agregara. Si es un ejercicio de parcial, completá \<YYYY\> con el año en que se tomó, \<N\> con el número de cuatri y \<chance\> con el numero de chance del parcial (1,2 o 3). Opcionalmente completá [-desc] con una breve descripción de lo que estás agregando, particularmente si no es un ejercicio de parcial.
 

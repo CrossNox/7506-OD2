@@ -1,0 +1,11 @@
+fecha,id_caso,descripcion,estado_caso,categoria,latitud,longitud
+2016-05-03,1,Mataron a uno,1,Arseny,100,100
+2016-05-03,2,Mataron al Guason!!,2,Robo,100,100
+2017-07-03,3,Incendio,1,Robo,100,100
+2017-07-03,4,Robaron un banco,3,Incendio,100,100
+2017-08-03,5,Mataron a uno,2,Incendio,100,100
+2017-08-03,6,Mataron a uno,1,Arseny,100,100
+2017-10-03,7,Mataron a uno,2,Robo,100,100
+2017-10-03,8,Mataron a uno,3,Incendio,100,100
+2017-11-03,9,Mataron a uno,2,Arseny,100,100
+2017-12-03,10,Mataron a uno,1,Robo,100,10

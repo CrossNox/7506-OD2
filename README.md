@@ -16,6 +16,12 @@ Usando conda:
 conda install --yes --file requirements.txt
 ```
 
+### Set-Up nbstripout
+
+```
+nbstripout --install
+```
+
 ### Como envio mis resueltos?
 * Forkea el repo
 * Escribí el resuelto en un notebook que contenga el enunciado y explicaciones acordes

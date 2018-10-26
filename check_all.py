@@ -16,6 +16,8 @@ ep = nbconvert.preprocessors.ExecutePreprocessor(
     timeout=120
 )
 
+class NotebookExecutionError(Exception):
+    pass
 
 def run_notebook(path):
     path = os.path.abspath(path)
@@ -26,11 +28,11 @@ def run_notebook(path):
     except Exception as e:
         print("\nException raised while running '{}'\n".format(path))
         traceback.print_exc(file=sys.stdout)
-        sys.exit(1)
+        raise NotebookExecutionError
 
 
 if __name__ == '__main__':
-    run = 0
+    run, errors, ok = 0, 0, 0
     sys.stdout.write('==========================='
                      ' Starting tests '
                      '===========================\n\n')
@@ -38,19 +40,33 @@ if __name__ == '__main__':
         shutil.rmtree(os.path.join(os.path.dirname(__file__), "metastore_db"))
     except:
         pass
-    for path in glob.iglob('*.ipynb'):
+    for path in glob.iglob(os.path.join(os.path.dirname(__file__), '**/*.ipynb'), recursive=True):
         s = time.time()
-        sys.stdout.write('Now running ' + path + '\n')
-        sys.stdout.flush()
-        run_notebook(path)
-        sys.stdout.write('\n\033[92m' +
+        sys.stdout.write('\n\033[34m' +
                          '===========================' +
-                         ' Ok - {}s '.format(int(time.time() - s)) +
+                         'Now running ' + path +
                          '===========================\n' +
                          '\033[0m')
-        run += 1
-    sys.stdout.write('\n\033[92m' +
+        sys.stdout.flush()
+        try:
+            run_notebook(path)
+            sys.stdout.write('\n\033[92m' +
+                             '===========================' +
+                             ' Ok - {}s '.format(int(time.time() - s)) +
+                             '===========================\n' +
+                             '\033[0m')
+            ok += 1
+        except:
+            sys.stdout.write('\n\033[91m' +
+                             '===========================' +
+                             ' Error - {}s '.format(int(time.time() - s)) +
+                             '===========================\n' +
+                             '\033[0m')
+            errors += 1
+        finally:
+            run += 1
+    sys.stdout.write('\n\033[93m' +
                      '===========================' +
-                     ' {} notebooks tested '.format(run) +
+                     ' {} notebooks tested - {} ok, {} errors'.format(run, ok, errors) +
                      '===========================\n' +
                      '\033[0m')

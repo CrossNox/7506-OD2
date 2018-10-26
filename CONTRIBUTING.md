@@ -19,6 +19,9 @@ Para cada nuevo ejercicio, creá un nuevo branch con el formato \<tema\>[-\<YYYY
 * Debe tener las explicaciones correspondientes del código
 * Las explicaciones deben hacer foco en las cuestiones teóricas detrás
 * De ser necesario, si hay cuestiones que haya que explicar pero escapen al alcance del ejercicio, referenciar un link lo más completo posible
+* No tener output en el notebook una vez ya commiteado
+* Tener un HTML con su corrida entera con el mismo nombre
+* Estar indexado en el html de la plataforma correspondiente
 
 ## Si no es un ejercicio de parcial:
 Ni idea, cuando haya algo lo pensamos ¯\_(ツ)_/¯

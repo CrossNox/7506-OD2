@@ -40,7 +40,7 @@ if __name__ == '__main__':
         shutil.rmtree(os.path.join(os.path.dirname(__file__), "metastore_db"))
     except:
         pass
-    for path in glob.iglob(os.path.join(os.path.dirname(__file__), '**/*.ipynb'), recursive=True):
+    for path in glob.iglob('*/*.ipynb'):
         s = time.time()
         sys.stdout.write('\n\033[34m' +
                          '===========================' +

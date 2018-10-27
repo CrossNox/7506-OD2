@@ -1,6 +1,8 @@
 # Guía de supervivencia para 75.06 (FIUBA)
 ## Ejercicios resueltos de Spark / Pandas
 
+**https://crossnox.github.io/7506-OD2/**
+
 El objetivo de este repositorio es juntar ejercicios resueltos de spark, pandas y quizás complementar algunos temas de la materia a través de una wiki.
 
 Somos un grupo reducido de colaboradores. Cualquier ayuda es bienvenida. ¿Cómo podés ayudar? Subí un issue si encontrás errores, o con ejercicios que falten, si hay cosas que no queden claras. Si te animás manda un PR para corregirlo también.

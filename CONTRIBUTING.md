@@ -21,7 +21,7 @@ Para cada nuevo ejercicio, creá un nuevo branch con el formato \<tema\>[-\<YYYY
 * De ser necesario, si hay cuestiones que haya que explicar pero escapen al alcance del ejercicio, referenciar un link lo más completo posible
 * No tener output en el notebook una vez ya commiteado
 * Tener un HTML con su corrida entera con el mismo nombre
-* Estar indexado en el html de la plataforma correspondiente
+* Estar indexado en el json (por ejemplo: `/pandas/pandasEjs.json`) de la plataforma correspondiente
 
 ## Si no es un ejercicio de parcial:
 Ni idea, cuando haya algo lo pensamos ¯\_(ツ)_/¯

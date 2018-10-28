@@ -1,0 +1,98 @@
+[
+    {
+        "anio": "2014",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2014C2_1_CaminoMinimo.html",
+        "nombreNotebook": "2014C2_1_CaminoMinimo.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2014C2_1_CaminoMinimo.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "1ra",
+        "resuelto": "2015C1_1_Anagramas.html",
+        "nombreNotebook": "2015C1_1_Anagramas.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C1_1_Anagramas.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "2da",
+        "resuelto": "2015C1_2_CantidadCaracteres.html",
+        "nombreNotebook": "2015C1_2_CantidadCaracteres.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C1_2_CantidadCaracteres.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "3ra",
+        "resuelto": "2015C1_3_PatronesMasFrecuentes.html",
+        "nombreNotebook": "2015C1_3_PatronesMasFrecuentes.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C1_3_PatronesMasFrecuentes.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2015C2_1_Rectangulos.html",
+        "nombreNotebook": "2015C2_1_Rectangulos.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C2_1_Rectangulos.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "2do",
+        "oportunidad":  "2da",
+        "resuelto": "2015C2_2_Anagramas.html",
+        "nombreNotebook": "2015C2_2_Anagramas.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C2_2_Anagramas.ipynb"
+    },
+    {
+        "anio": "2015",
+        "cuatrimestre": "2do",
+        "oportunidad":  "3ra",
+        "resuelto": "2015C2_3_Telescopio.html",
+        "nombreNotebook": "2015C2_3_Telescopio.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2015C2_3_Telescopio.ipynb"
+    },
+    {
+        "anio": "2016",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "1ra",
+        "resuelto": "2016C1_1_UBER.html",
+        "nombreNotebook": "2016C1_1_UBER.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2016C1_1_UBER.ipynb"
+    },
+    {
+        "anio": "2016",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "2da",
+        "resuelto": "2016C1_2_Chat.html",
+        "nombreNotebook": "2016C1_2_Chat.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2016C1_2_Chat.ipynb"
+    },
+    {
+        "anio": "2016",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2016C2_1_CribaEratostenes.html",
+        "nombreNotebook": "2016C2_1_CribaEratostenes.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2016C2_1_CribaEratostenes.ipynb"
+    },
+    {
+        "anio": "2016",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2016C2_1_Score.html",
+        "nombreNotebook": "2016C2_1_Score.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2016C2_1_Score.ipynb"
+    },
+    {
+        "anio": "2017",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "1ra",
+        "resuelto": "2017C1_1_NBA.html",
+        "nombreNotebook": "2017C1_1_NBA.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2017C1_1_NBA.ipynb"
+    }
+]

@@ -13,7 +13,7 @@
 </div>
 <meta charset="utf-8" />
 
-<title>2015C2_3_Telescopio</title>
+<title>2017C2_1_Patentamientos</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13127,21 +13127,9 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Un telescopio registra automaticamente la luminosidad de distintas
-estrellas generando un RDD con registros de tipo (star_id,
-magnitude,spectral_type, timestamp). Queremos obtener un listado de
-estrellas que tienen el mismo tipo espectral e igual promedio de
-magnitud una vez redondeado el mismo a un decimal. El resultado
-debe ser una lista en donde cada elemento de la lista es una lista de ids de estrellas similares. 
-<a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqt4ba44yx">Link</a></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>De <a href="http://www.astronexus.com/hyg">aca</a> saco un csv de estrellas. Lo cargo como DataFrame para leerlo mas facil. Preproceso el DF y luego obtengo el RDD.</p>
+<h1 id="Consigna">Consigna<a class="anchor-link" href="#Consigna">&#182;</a></h1><p>Link al parcial: <a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk">https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk</a></p>
+<p>Se cuenta con un RDD con información sobre patentamientos de autos con la siguiente información (patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha), donde tipo_vehiculo indica si la unidad patentada es auto, pickup, camión o moto.</p>
+<p>Se pide generar un programa en pySpark que indique la marca y modelo del auto más patentado por tipo de vehículo en la provincia de Buenos Aires en el mes de Abril de 2017.</p>
 
 </div>
 </div>
@@ -13151,20 +13139,9 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Faker</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">udf</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">faker</span> <span class="o">=</span> <span class="n">Faker</span><span class="p">()</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s2">&quot;textos/hygfull.csv.gz&quot;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s2">&quot;StarId&quot;</span><span class="p">,</span><span class="s2">&quot;Mag&quot;</span><span class="p">,</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">])</span>
-<span class="n">udf_timestamp</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">faker</span><span class="o">.</span><span class="n">unix_time</span><span class="p">(),</span><span class="n">IntegerType</span><span class="p">())</span>
-<span class="n">udf_spectrum</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">StringType</span><span class="p">())</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span><span class="n">udf_timestamp</span><span class="p">(</span><span class="s2">&quot;StarId&quot;</span><span class="p">))</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">,</span><span class="n">udf_spectrum</span><span class="p">(</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">))</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;Mag&quot;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Mag&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">DoubleType</span><span class="p">()))</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;StarId&quot;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;StarId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Spectrum</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+<span class="c1">#  Por si hay mas de un contexto de PySpark corriendo (por ejemplo, otro Notebook), esto para utilizar el mismo.</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13177,7 +13154,30 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#  Creamos algunos datos para poder hacer el seguimiento de la resolución.</span>
+<span class="c1">#  El resultado final debería ser (&#39;Chevrolet&#39;, &#39;Sonic&#39;), (&#39;Ford&#39;, &#39;Cargo 712&#39;) y (&#39;Honda&#39;, &#39;Hornet 160R&#39;).</span>
+
+<span class="n">datos_patentamientos</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 100&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-15&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 101&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Chaco&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 102&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-01&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 103&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 104&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 105&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Uruguay&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-03&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 106&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-05&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 107&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-17&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 108&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 109&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 110&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 111&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Cordoba&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-20&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 112&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-21&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 113&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-23&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 114&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-24&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 115&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 116&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 117&#39;</span><span class="p">,</span> <span class="s1">&#39;Ducati&#39;</span><span class="p">,</span> <span class="s1">&#39;SuperSport&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 118&#39;</span><span class="p">,</span> <span class="s1">&#39;Scania&#39;</span><span class="p">,</span> <span class="s1">&#39;420&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">)</span>
+<span class="p">]</span>
 </pre></div>
 
     </div>
@@ -13188,7 +13188,18 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Necesitamos agrupar por tipo espectral (tercer columna) y promedio de magnitud (segunda columna). Nos piden que el promedio de magnitud este redondeado a un decimal. Creamos la clave para agrupar y como valor el id. Agrupamos por clave:</p>
+<h1 id="Resoluci&#243;n">Resoluci&#243;n<a class="anchor-link" href="#Resoluci&#243;n">&#182;</a></h1><p>Nos piden filtrar por fecha y provincia. Luego agrupar por tipo_vehiculo, marca y modelo, y encontrar el vehículo más patentado por tipo_vehiculo.</p>
+<p>Observación: Es importante notar que en <strong>ningun</strong> caso vamos a realizar ordenamientos, ya que son operaciones muy costosas y no son necesarias para la resolución de este ejercicio.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Paso-1">Paso 1<a class="anchor-link" href="#Paso-1">&#182;</a></h3><p>Cargamos los datos en un RDD, y luego aplicamos el filtro por las dos condiciones que nos indican en el enunciado.</p>
+<p>Además, nos quedamos con tuplas de la pinta <code>((tipo_vehiculo, (marca, modelo)), 1)</code> para poder realizar un reduceByKey en el paso siguiente y obtener la cantidad de patentamientos totales para cada vehículo.</p>
+<p>Observación: vehículo == (marca, modelo)</p>
 
 </div>
 </div>
@@ -13198,7 +13209,35 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">groupByKey</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">datos_patentamientos</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#  Header de rdd_pt: [patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha]</span>
+
+<span class="n">CAMPO_PROVINCIA</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">CAMPO_FECHA</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">CAMPO_MODELO</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">CAMPO_MARCA</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">CAMPO_TIPO_VEHICULO</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="k">def</span> <span class="nf">organizar_clave</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_TIPO_VEHICULO</span><span class="p">],</span> 
+                 <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MARCA</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MODELO</span><span class="p">])</span>
+            <span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_PROVINCIA</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Buenos Aires&#39;</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_FECHA</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;2017-04&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">organizar_clave</span><span class="p">)</span>
+<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13209,7 +13248,9 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Ahora tenemos algo del tipo &lt;clave, iterable de StarIds&gt;. Queremos convertir ese iterable a una lista. Una opcion seria hacer <code>.map(lambda x: (x[0], list(x[1])))</code>, pero es mucho mas prolijo hacerlo usando <a href="http://spark.apache.org/docs/latest/api/python/pyspark.html?highlight=mapvalues#pyspark.RDD.mapValues">.mapValues</a>:</p>
+<h3 id="Paso-2">Paso 2<a class="anchor-link" href="#Paso-2">&#182;</a></h3><p>Haremos un <code>reduceByKey</code> para obtener el total de patentamientos de cada <code>(marca, modelo)</code> por <code>tipo_vehiculo</code>.</p>
+<p>Luego reorganizaremos los datos con <code>map</code> para tener tuplas del estilo <code>(tipo_vehiculo, ((marca, modelo), total_patentamientos)</code> lo cual será necesario para el paso final.</p>
+<p>Observación: Notar que las claves por las que se agrupa son de la pinta <code>(tipo_vehiculo, (marca, modelo))</code>.</p>
 
 </div>
 </div>
@@ -13219,7 +13260,11 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">mapValues</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">acomodar_modelo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">acomodar_modelo</span><span class="p">)</span>
+<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13230,7 +13275,8 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Por lo que dice el enunciado, no importa la clave, solo la lista de similares. Entonces en la celda anterior nos quedamos con solo la lista de similares de cada registro.</p>
+<h3 id="Paso-3">Paso 3<a class="anchor-link" href="#Paso-3">&#182;</a></h3><p>Finalmente aplicaremos otro <code>reduceByKey</code> para obtener el vehículo con mayor cantidad de patentamientos por tipo de vehículo.</p>
+<p>Observación: Notar que <code>a[1]</code> es el segundo elemento de la tupla <code>((marca, modelo), total)</code>.</p>
 
 </div>
 </div>
@@ -13240,7 +13286,8 @@ debe ser una lista en donde cada elemento de la lista es una lista de ids de est
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd_pt</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span>
 </pre></div>
 
     </div>

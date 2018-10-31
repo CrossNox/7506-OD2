@@ -1,5 +1,6 @@
 {%- extends 'full.tpl' -%}
 {%- block html_head -%}
+{{ super() }}
 <div><!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128386288-1"></script>
 <script>
@@ -11,5 +12,4 @@
 </script>
 
 </div>
-{{ super() }}
 {%- endblock -%}

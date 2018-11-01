@@ -1,5 +1,5 @@
 (function(d) {
-  var base = "https://crossnox.github.io/7506-OD2/";
+  var base = "https://crossnox.github.io/7506-OD2/website/";
 
   var i, count = 0;
 

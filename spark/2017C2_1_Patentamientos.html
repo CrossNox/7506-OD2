@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>2017C1_1_ebooks</title>
+<title>2017C2_1_Patentamientos</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13127,14 +13127,9 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Un  sitio  de  E books  tiene  información  sobre  los  reviews  que  los  usuarios hacen  de  sus  libros  en  un  DataFrame  con  formato  (user_id,  book_id,  rating, timestamp).</p>
-<p>Por otro lado tenemos información en otro DataFrame que bajamos de  GoodReads:  (book_id,  book_name,  avg_rating).  Podemos  suponer  que  los Ids de los libros son compatibles.</p>
-<p>Se pide usar Python Pandas para:</p>
-<ol>
-<li>Obtener un DataFrame que indique el TOP5 de Ebooks en el sitio de Ebooks. (Para este punto se puede ignorar el segundo DataFrame).</li>
-<li>Obtener un DataFrame que indique qué libros tienen una diferencia de rating promedio mayor al 20% entre el sitio de Ebooks y GoodReads.</li>
-</ol>
-<p><a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsptt94yl">Link</a></p>
+<h1 id="Consigna">Consigna<a class="anchor-link" href="#Consigna">&#182;</a></h1><p>Link al parcial: <a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk">https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk</a></p>
+<p>Se cuenta con un RDD con información sobre patentamientos de autos con la siguiente información (patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha), donde tipo_vehiculo indica si la unidad patentada es auto, pickup, camión o moto.</p>
+<p>Se pide generar un programa en pySpark que indique la marca y modelo del auto más patentado por tipo de vehículo en la provincia de Buenos Aires en el mes de Abril de 2017.</p>
 
 </div>
 </div>
@@ -13144,14 +13139,45 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Set-up y vista rápida de los dos datasets sintéticos</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+<span class="c1">#  Por si hay mas de un contexto de PySpark corriendo (por ejemplo, otro Notebook), esto para utilizar el mismo.</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+</pre></div>
 
-<span class="n">ebooks_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/2017C1_1_ebooks.csv&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ebooks_df</span><span class="p">)</span>
+    </div>
+</div>
+</div>
 
-<span class="n">goodreads_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/2017C1_1_goodreads.csv&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">goodreads_df</span><span class="p">)</span>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#  Creamos algunos datos para poder hacer el seguimiento de la resolución.</span>
+<span class="c1">#  El resultado final debería ser (&#39;Chevrolet&#39;, &#39;Sonic&#39;), (&#39;Ford&#39;, &#39;Cargo 712&#39;) y (&#39;Honda&#39;, &#39;Hornet 160R&#39;).</span>
+
+<span class="n">datos_patentamientos</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 100&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-15&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 101&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Chaco&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 102&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-01&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 103&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 104&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 105&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Uruguay&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-03&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 106&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-05&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 107&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-17&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 108&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 109&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 110&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 111&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Cordoba&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-20&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 112&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-21&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 113&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-23&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 114&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-24&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 115&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 116&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 117&#39;</span><span class="p">,</span> <span class="s1">&#39;Ducati&#39;</span><span class="p">,</span> <span class="s1">&#39;SuperSport&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;MHG 118&#39;</span><span class="p">,</span> <span class="s1">&#39;Scania&#39;</span><span class="p">,</span> <span class="s1">&#39;420&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">)</span>
+<span class="p">]</span>
 </pre></div>
 
     </div>
@@ -13162,13 +13188,18 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>1. Obtener un DataFrame que indique el TOP5 de Ebooks en el sitio de Ebooks. (Para este punto se puede ignorar el segundo DataFrame)</strong></p>
-<p>Los pasos a seguir serían los siguientes:</p>
-<ol>
-<li>Agrupamos por libro</li>
-<li>Calculamos el score de cada libro en base a los ratings</li>
-<li>Tomamos el top5</li>
-</ol>
+<h1 id="Resoluci&#243;n">Resoluci&#243;n<a class="anchor-link" href="#Resoluci&#243;n">&#182;</a></h1><p>Nos piden filtrar por fecha y provincia. Luego agrupar por tipo_vehiculo, marca y modelo, y encontrar el vehículo más patentado por tipo_vehiculo.</p>
+<p>Observación: Es importante notar que en <strong>ningun</strong> caso vamos a realizar ordenamientos, ya que son operaciones muy costosas y no son necesarias para la resolución de este ejercicio.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Paso-1">Paso 1<a class="anchor-link" href="#Paso-1">&#182;</a></h3><p>Cargamos los datos en un RDD, y luego aplicamos el filtro por las dos condiciones que nos indican en el enunciado.</p>
+<p>Además, nos quedamos con tuplas de la pinta <code>((tipo_vehiculo, (marca, modelo)), 1)</code> para poder realizar un reduceByKey en el paso siguiente y obtener la cantidad de patentamientos totales para cada vehículo.</p>
+<p>Observación: vehículo == (marca, modelo)</p>
 
 </div>
 </div>
@@ -13178,10 +13209,35 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">datos_patentamientos</span><span class="p">)</span>
+</pre></div>
 
-<span class="n">ebooks_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;book_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;rating&#39;</span><span class="p">:</span><span class="n">score</span><span class="p">})</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">)</span>
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#  Header de rdd_pt: [patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha]</span>
+
+<span class="n">CAMPO_PROVINCIA</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">CAMPO_FECHA</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">CAMPO_MODELO</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">CAMPO_MARCA</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">CAMPO_TIPO_VEHICULO</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="k">def</span> <span class="nf">organizar_clave</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_TIPO_VEHICULO</span><span class="p">],</span> 
+                 <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MARCA</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MODELO</span><span class="p">])</span>
+            <span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_PROVINCIA</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Buenos Aires&#39;</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_FECHA</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;2017-04&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">organizar_clave</span><span class="p">)</span>
+<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13192,22 +13248,35 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Notar que en el paso anterior usamos el promedio como función de score, pero esto trae un problema: Si consideramos libros con pocas reviews muy positivas, no es representativo realmente. Es una consecuencia de la <a href="http://www-stat.wharton.upenn.edu/~hwainer/Readings/Most%20Dangerous%20eqn.pdf">ecuación mas peligrosa de la historia</a>. Un approach más inteligente sería considerar la cantidad de reviews también.</p>
+<h3 id="Paso-2">Paso 2<a class="anchor-link" href="#Paso-2">&#182;</a></h3><p>Haremos un <code>reduceByKey</code> para obtener el total de patentamientos de cada <code>(marca, modelo)</code> por <code>tipo_vehiculo</code>.</p>
+<p>Luego reorganizaremos los datos con <code>map</code> para tener tuplas del estilo <code>(tipo_vehiculo, ((marca, modelo), total_patentamientos)</code> lo cual será necesario para el paso final.</p>
+<p>Observación: Notar que las claves por las que se agrupa son de la pinta <code>(tipo_vehiculo, (marca, modelo))</code>.</p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">acomodar_modelo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">acomodar_modelo</span><span class="p">)</span>
+<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>2. Obtener un DataFrame que indique qué libros tienen una diferencia de rating promedio mayor al 20% entre el sitio de Ebooks y GoodReads</strong></p>
-<p>Acá, vamos a tener que juntar los dos dataframes, calcular el rating promedio del primer dataframe, calcular la el porcentaje de ese rating promedio sobre el promedio de goodreads, filtrar donde ese número sea mayor al 20% y devolver todos los nombres.</p>
-<p>Entonces:</p>
-<ol>
-<li>Calcular el rating del primer dataset</li>
-<li>Hacer un inner join entre ambos datasets, usando la columna de book_id para juntar.</li>
-<li>Devolver los nombres donde la diferencia sea mayor al 20%</li>
-</ol>
+<h3 id="Paso-3">Paso 3<a class="anchor-link" href="#Paso-3">&#182;</a></h3><p>Finalmente aplicaremos otro <code>reduceByKey</code> para obtener el vehículo con mayor cantidad de patentamientos por tipo de vehículo.</p>
+<p>Observación: Notar que <code>a[1]</code> es el segundo elemento de la tupla <code>((marca, modelo), total)</code>.</p>
 
 </div>
 </div>
@@ -13217,34 +13286,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ebooks_df_mean</span> <span class="o">=</span> <span class="n">ebooks_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;book_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;rating&#39;</span><span class="p">:</span><span class="n">score</span><span class="p">})</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_total</span> <span class="o">=</span> <span class="n">goodreads_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ebooks_df_mean</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;book_id&#39;</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
-<span class="n">df_total</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_total</span><span class="p">[(</span><span class="n">df_total</span><span class="o">.</span><span class="n">rating</span><span class="o">/</span><span class="n">df_total</span><span class="o">.</span><span class="n">avg_rating</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">]</span><span class="o">.</span><span class="n">book_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd_pt</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span>
 </pre></div>
 
     </div>

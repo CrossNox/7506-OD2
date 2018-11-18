@@ -114,4 +114,6 @@
     window.githubCard.render = render;
   }
 
+  $('#ghcard-ndvazquez-3').attr("src", $('#ghcard-ndvazquez-3').attr('src'))
+
 })(document);

@@ -1,0 +1,19 @@
+.titulo {
+    padding-top: 40px;
+}
+
+#colaboradores {
+    text-align: center;
+}
+
+iframe {
+    display: inline-block;
+    margin: 0 auto;
+    max-width:23%;
+    max-height:80%;
+}
+
+.github-widget {
+    margin: 10px;
+    font-size: 10px;
+}

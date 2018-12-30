@@ -94,5 +94,13 @@
         "resuelto": "2017C1_1_NBA.html",
         "nombreNotebook": "2017C1_1_NBA.ipynb",
         "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2017C1_1_NBA.ipynb"
+    },
+    {
+        "anio": "2018",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2018C2_1_Recetas.html",
+        "nombreNotebook": "2018C2_1_Recetas.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2018C2_1_Recetas.ipynb"
     }
 ]

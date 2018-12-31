@@ -38,5 +38,13 @@
         "resuelto": "2018C1_2_GCPD.html",
         "nombreNotebook": "2018C1_2_GCPD.ipynb",
         "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/pandas/2018C1_2_GCPD.ipynb"
+    },
+    {
+        "anio": "2018",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2018C2_1_JJOO.html",
+        "nombreNotebook": "2018C2_1_JJOO.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/pandas/2018C2_1_JJOO.ipynb"
     }
 ]

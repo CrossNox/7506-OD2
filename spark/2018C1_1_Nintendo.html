@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>2017C2_1_Patentamientos</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>2018C1_1_Nintendo</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11786,9 +11786,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Consigna">Consigna<a class="anchor-link" href="#Consigna">&#182;</a></h1><p>Link al parcial: <a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk">https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqsotjd4yk</a></p>
-<p>Se cuenta con un RDD con información sobre patentamientos de autos con la siguiente información (patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha), donde tipo_vehiculo indica si la unidad patentada es auto, pickup, camión o moto.</p>
-<p>Se pide generar un programa en pySpark que indique la marca y modelo del auto más patentado por tipo de vehículo en la provincia de Buenos Aires en el mes de Abril de 2017.</p>
+<h1 id="Consigna">Consigna<a class="anchor-link" href="#Consigna">&#182;</a></h1><p>Link al parcial: <a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqu7n114zx">https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqu7n114zx</a></p>
+<p>Nintendo of America (EEUU) tiene información de ventas de videojuegos físicas mensuales totalizadas en EEUU las cuales se realizan en cadenas de tiendas de videojuegos en el siguiente RDD: (id_videojuego, id_tienda, mes, anio, total_ventas_mensuales).</p>
+<p>Por otro lado tenemos un RDD con información de las tiendas y de su ubicación (id_tienda, direccion, latitud, longitud, codigo_postal, estado).</p>
+<p>Con esta información escribir un programa en pySpark para obtener la tienda que realizó menor cantidad de ventas en el estado de “Georgia” en todo el año 2017.</p>
 
 </div>
 </div>
@@ -11799,6 +11800,7 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="k">import</span> <span class="n">SparkContext</span>
+
 <span class="c1">#  Por si hay mas de un contexto de PySpark corriendo (por ejemplo, otro Notebook), esto para utilizar el mismo.</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 </pre></div>
@@ -11813,29 +11815,30 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#  Creamos algunos datos para poder hacer el seguimiento de la resolución.</span>
-<span class="c1">#  El resultado final debería ser (&#39;Chevrolet&#39;, &#39;Sonic&#39;), (&#39;Ford&#39;, &#39;Cargo 712&#39;) y (&#39;Honda&#39;, &#39;Hornet 160R&#39;).</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#  Vamos a crear algunos datos para poder ver qué es lo que va sucediendo en cada paso de la resolución.</span>
+<span class="c1">#  El resultado final debería ser la tienda 1, con un total de 35 ventas.</span>
 
-<span class="n">datos_patentamientos</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 100&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-15&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 101&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Chaco&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-03-19&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 102&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-01&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 103&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 104&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-02&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 105&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Uruguay&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-03&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 106&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-05&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 107&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-17&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 108&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 109&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 110&#39;</span><span class="p">,</span> <span class="s1">&#39;Ford&#39;</span><span class="p">,</span> <span class="s1">&#39;Cargo 712&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-19&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 111&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Siena&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Cordoba&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-20&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 112&#39;</span><span class="p">,</span> <span class="s1">&#39;Chevrolet&#39;</span><span class="p">,</span> <span class="s1">&#39;Sonic&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-21&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 113&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-23&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 114&#39;</span><span class="p">,</span> <span class="s1">&#39;Fiat&#39;</span><span class="p">,</span> <span class="s1">&#39;Sedan&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-24&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 115&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 116&#39;</span><span class="p">,</span> <span class="s1">&#39;Honda&#39;</span><span class="p">,</span> <span class="s1">&#39;Hornet 160R&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-25&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 117&#39;</span><span class="p">,</span> <span class="s1">&#39;Ducati&#39;</span><span class="p">,</span> <span class="s1">&#39;SuperSport&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;moto&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;MHG 118&#39;</span><span class="p">,</span> <span class="s1">&#39;Scania&#39;</span><span class="p">,</span> <span class="s1">&#39;420&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;camion&#39;</span><span class="p">,</span> <span class="s1">&#39;Buenos Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;2017-04-26&#39;</span><span class="p">)</span>
+<span class="n">datos_ventas</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2015</span><span class="p">,</span> <span class="mi">23</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2016</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">datos_tiendas</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Calle Falsa 123&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1834</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Siempre Viva 321&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4381</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Av Paseo Colon 850&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1063</span><span class="p">,</span> <span class="s1">&#39;Texas&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Sarasa 120&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="s1">&#39;California&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;Mostaza 564&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1324</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;Ketchup 897&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="mi">7891</span><span class="p">,</span> <span class="s1">&#39;Los Angeles&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Silver Rathalos 98287&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="s1">&#39;Texas&#39;</span><span class="p">)</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -11848,8 +11851,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Resoluci&#243;n">Resoluci&#243;n<a class="anchor-link" href="#Resoluci&#243;n">&#182;</a></h1><p>Nos piden filtrar por fecha y provincia. Luego agrupar por tipo_vehiculo, marca y modelo, y encontrar el vehículo más patentado por tipo_vehiculo.</p>
-<p>Observación: Es importante notar que en <strong>ningun</strong> caso vamos a realizar ordenamientos, ya que son operaciones muy costosas y no son necesarias para la resolución de este ejercicio.</p>
+<h1 id="Resoluci&#243;n">Resoluci&#243;n<a class="anchor-link" href="#Resoluci&#243;n">&#182;</a></h1><p>Básicamente lo que nos piden es filtrar tiendas por año y por estado, luego contar cuántas ventas tiene cada tienda y finalmente quedarnos con la que tenga la menor cantidad.</p>
+<p>Notar que en algún punto de la resolución, va a ser necesario hacer un <strong>join</strong> de los RDDs, por lo cual debemos hacer el filtrado de los datos <em>antes</em> de unirlos, para de esta forma hacer menos costosa la unión.</p>
 
 </div>
 </div>
@@ -11858,9 +11861,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Paso-1">Paso 1<a class="anchor-link" href="#Paso-1">&#182;</a></h3><p>Cargamos los datos en un RDD, y luego aplicamos el filtro por las dos condiciones que nos indican en el enunciado.</p>
-<p>Además, nos quedamos con tuplas de la pinta <code>((tipo_vehiculo, (marca, modelo)), 1)</code> para poder realizar un reduceByKey en el paso siguiente y obtener la cantidad de patentamientos totales para cada vehículo.</p>
-<p>Observación: vehículo == (marca, modelo)</p>
+<h2 id="Paso-1">Paso 1<a class="anchor-link" href="#Paso-1">&#182;</a></h2><p>Cargamos los datos en RDDs.</p>
+<p>Luego filtraremos cada RDD según los criterios que nos piden y descartaremos las columnas que no nos interesan para lo que pide el enunciado.</p>
 
 </div>
 </div>
@@ -11870,7 +11872,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">datos_patentamientos</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd_ventas</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">datos_ventas</span><span class="p">)</span>
+<span class="n">rdd_tiendas</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">datos_tiendas</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11883,22 +11886,15 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#  Header de rdd_pt: [patente, marca, modelo, versión, tipo_vehiculo, provincia, fecha]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#  Header de rdd_ventas: [id_videojuego, id_tienda, mes, anio, total_ventas_mensuales].</span>
+<span class="c1">#  Índice de id_tienda: 1.</span>
+<span class="c1">#  Índice de anio: 3.</span>
+<span class="c1">#  Índice de total_ventas_mensuales: 4.</span>
+<span class="c1">#  Filtramos rdd_ventas para quedarnos con aquellos registros cuyo anio sea 2017, luego nos quedamos con tuplas</span>
+<span class="c1">#  de la forma (id_tienda, total_ventas_mensuales).</span>
 
-<span class="n">CAMPO_PROVINCIA</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">CAMPO_FECHA</span> <span class="o">=</span> <span class="mi">6</span>
-
-<span class="n">CAMPO_MODELO</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">CAMPO_MARCA</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">CAMPO_TIPO_VEHICULO</span> <span class="o">=</span> <span class="mi">4</span>
-
-<span class="k">def</span> <span class="nf">organizar_clave</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_TIPO_VEHICULO</span><span class="p">],</span> 
-                 <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MARCA</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_MODELO</span><span class="p">])</span>
-            <span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_PROVINCIA</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Buenos Aires&#39;</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">CAMPO_FECHA</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;2017-04&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">organizar_clave</span><span class="p">)</span>
-<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="n">rdd_ventas</span> <span class="o">=</span> <span class="n">rdd_ventas</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2017</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+<span class="n">rdd_ventas</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -11917,21 +11913,7 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[((&#39;camion&#39;, (&#39;Ford&#39;, &#39;Cargo 712&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Fiat&#39;, &#39;Siena&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Chevrolet&#39;, &#39;Sonic&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Fiat&#39;, &#39;Siena&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Chevrolet&#39;, &#39;Sonic&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Chevrolet&#39;, &#39;Sonic&#39;)), 1),
- ((&#39;camion&#39;, (&#39;Ford&#39;, &#39;Cargo 712&#39;)), 1),
- ((&#39;camion&#39;, (&#39;Ford&#39;, &#39;Cargo 712&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Chevrolet&#39;, &#39;Sonic&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Fiat&#39;, &#39;Sedan&#39;)), 1),
- ((&#39;auto&#39;, (&#39;Fiat&#39;, &#39;Sedan&#39;)), 1),
- ((&#39;moto&#39;, (&#39;Honda&#39;, &#39;Hornet 160R&#39;)), 1),
- ((&#39;moto&#39;, (&#39;Honda&#39;, &#39;Hornet 160R&#39;)), 1),
- ((&#39;moto&#39;, (&#39;Ducati&#39;, &#39;SuperSport&#39;)), 1),
- ((&#39;camion&#39;, (&#39;Scania&#39;, &#39;420&#39;)), 1)]</pre>
+<pre>[(1, 20), (2, 30), (1, 15), (3, 10), (3, 5), (4, 12), (2, 15), (5, 70)]</pre>
 </div>
 
 </div>
@@ -11939,28 +11921,20 @@ div#notebook {
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Paso-2">Paso 2<a class="anchor-link" href="#Paso-2">&#182;</a></h3><p>Haremos un <code>reduceByKey</code> para obtener el total de patentamientos de cada <code>(marca, modelo)</code> por <code>tipo_vehiculo</code>.</p>
-<p>Luego reorganizaremos los datos con <code>map</code> para tener tuplas del estilo <code>(tipo_vehiculo, ((marca, modelo), total_patentamientos)</code> lo cual será necesario para el paso final.</p>
-<p>Observación: Notar que las claves por las que se agrupa son de la pinta <code>(tipo_vehiculo, (marca, modelo))</code>.</p>
-
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">acomodar_modelo</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#  Header de rdd_tiendas: [id_tienda, direccion, latitud, longitud, codigo_postal, estado].</span>
+<span class="c1">#  Índice de id_tienda: 0.</span>
+<span class="c1">#  Índice de estado: 5.</span>
+<span class="c1">#  Filtramos rdd_tiendas para quedarnos con aquellos registros cuyo estado sea Georgia, luego nos quedamos con tuplas</span>
+<span class="c1">#  de la forma (id_tienda, estado). Si bien no necesitamos saber el estado, es necesario para poder hacer la unión.</span>
 
-<span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">acomodar_modelo</span><span class="p">)</span>
-<span class="n">rdd_pt</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="n">rdd_tiendas</span> <span class="o">=</span> <span class="n">rdd_tiendas</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="n">rdd_tiendas</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -11979,13 +11953,7 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;camion&#39;, ((&#39;Ford&#39;, &#39;Cargo 712&#39;), 3)),
- (&#39;auto&#39;, ((&#39;Chevrolet&#39;, &#39;Sonic&#39;), 4)),
- (&#39;moto&#39;, ((&#39;Honda&#39;, &#39;Hornet 160R&#39;), 2)),
- (&#39;auto&#39;, ((&#39;Fiat&#39;, &#39;Sedan&#39;), 2)),
- (&#39;auto&#39;, ((&#39;Fiat&#39;, &#39;Siena&#39;), 2)),
- (&#39;moto&#39;, ((&#39;Ducati&#39;, &#39;SuperSport&#39;), 1)),
- (&#39;camion&#39;, ((&#39;Scania&#39;, &#39;420&#39;), 1))]</pre>
+<pre>[(1, &#39;Georgia&#39;), (2, &#39;Georgia&#39;), (5, &#39;Georgia&#39;)]</pre>
 </div>
 
 </div>
@@ -11998,8 +11966,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Paso-3">Paso 3<a class="anchor-link" href="#Paso-3">&#182;</a></h3><p>Finalmente aplicaremos otro <code>reduceByKey</code> para obtener el vehículo con mayor cantidad de patentamientos por tipo de vehículo.</p>
-<p>Observación: Notar que <code>a[1]</code> es el segundo elemento de la tupla <code>((marca, modelo), total)</code>.</p>
+<h2 id="Paso-2">Paso 2<a class="anchor-link" href="#Paso-2">&#182;</a></h2><p>Unimos los RDDs por <code>id_tienda</code>, y luego nos quedamos con tuplas de la forma <code>(id_tienda, total_ventas_mensuales)</code>.</p>
+<p>Observación: El método <code>join</code> es un <em>inner join</em> por lo cual se queda con las claves que están presentes en ambos RDD.</p>
+<p>Notar que el resultado es otro RDD el cual está formado por tuplas <code>(clave, (valor_rdd1, valor_rdd2))</code>.</p>
+<p>El <code>map</code> no es estrictamente necesario, porque de todas formas el <code>reduceByKey</code> va a sumar por el elemento numérico de la tupla <code>(total_ventas_mensuales, estado)</code> y dejarlas en el mismo formato que obtenemos con el <code>map</code>.</p>
 
 </div>
 </div>
@@ -12009,31 +11979,34 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd_pt</span> <span class="o">=</span> <span class="n">rdd_pt</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">b</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd_pt</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd_union</span> <span class="o">=</span> <span class="n">rdd_ventas</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd_tiendas</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">rdd_union</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Paso-3">Paso 3<a class="anchor-link" href="#Paso-3">&#182;</a></h2><p>Finalmente hacemos un <code>reduceByKey</code> para obtener las ventas anuales de cada tienda, y luego buscamos la que tenga la menor cantidad de ventas utilizando <code>reduce</code>.</p>
+<p>Observación: Es importante utilizar <code>reduce</code> ya que sólamente nos están pidiendo un único resultado, por lo cual utilizar <code>takeOrdered</code> u ordenar de alguna otra forma implicaría una operación innecesariamente costosa.</p>
 
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>auto: Chevrolet Sonic
-moto: Honda Hornet 160R
-camion: Ford Cargo 712
-</pre>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd_union</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="k">else</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
 
+</div>
 </div>
 </div>
 

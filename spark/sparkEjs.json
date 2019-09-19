@@ -94,5 +94,29 @@
         "resuelto": "2017C1_1_NBA.html",
         "nombreNotebook": "2017C1_1_NBA.ipynb",
         "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2017C1_1_NBA.ipynb"
+    },
+    {
+        "anio": "2017",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2017C2_1_Patentamientos.html",
+        "nombreNotebook": "2017C2_1_Patentamientos.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2017C2_1_Patentamientos.ipynb"
+    },
+    {
+        "anio": "2017",
+        "cuatrimestre": "2do",
+        "oportunidad":  "2da",
+        "resuelto": "2017C2_2_VentasDeJuegos.html",
+        "nombreNotebook": "2017C2_2_VentasDeJuegos.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2017C2_2_VentasDeJuegos.ipynb"
+    },
+    {
+        "anio": "2018",
+        "cuatrimestre": "1ro",
+        "oportunidad":  "1ra",
+        "resuelto": "2018C1_1_Nintendo.html",
+        "nombreNotebook": "2018C1_1_Nintendo.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2018C1_1_Nintendo.ipynb"
     }
 ]

@@ -118,5 +118,13 @@
         "resuelto": "2018C1_1_Nintendo.html",
         "nombreNotebook": "2018C1_1_Nintendo.ipynb",
         "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2018C1_1_Nintendo.ipynb"
+    },
+    {
+        "anio": "2018",
+        "cuatrimestre": "2do",
+        "oportunidad":  "1ra",
+        "resuelto": "2018C2_1_Recetas.html",
+        "nombreNotebook": "2018C2_1_Recetas.ipynb",
+        "notebook": "https://github.com/CrossNox/7506-OD2/blob/master/spark/2018C2_1_Recetas.ipynb"
     }
 ]

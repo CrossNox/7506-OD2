@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>2015C1_3_PatronesMasFrecuentes</title>
+<title>2018C1_1_GCPD</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13127,23 +13127,20 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Tenemos una colección de documentos (textos) almacenados en un
-cluster. Se quiere establecer un ranking de los patrones mas frecuentes
-para la aparición de letras en las palabras. Por ejemplo “sister”,
-“ejects” , “ninety” y “amazon” responden al patrón “abacde”.
-Programar en map-reduce un programa que genere como resultado un
-listado de tipo (patron, frecuencia) indicando cuántas veces aparece
-cada patrón en la colección de documentos. Usar combiners como
-método de agregación.</p>
-<p><a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqss6zt4ym">Link</a></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Creo un rdd con el tres documentos obtenidos de wikipedia. Primero mapeo la funcion <code>word_tokenizer</code> que crea una lista de palabras desde un string. Como queremos una lista de palabras, hay que usar <code>flatMap</code>.</p>
+<p><strong>EL ENUNCIADO DE ESTE EJERCICIO PIDE RESOLVERLO CON PANDAS</strong></p>
+<p><strong>SE AGREGA LA RESOLUCIÓN DE SPARKSQL DE TODAS FORMAS</strong></p>
+<blockquote><p><a href="https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqu7n114zx">https://piazza.com/class_profile/get_resource/jkr2voxi1yw4wt/jkr2vqu7n114zx</a></p>
+</blockquote>
+<p>El GCPD (Gotham City Police Dept) recolecta la información de casos policiales que acontecen en Ciudad Gótica. Esta información se encuentra guardada en un dataframe con el siguiente formato: (fecha, id_caso, descripcion, estado_caso, categoria, latitud, longitud).</p>
+<p>Los  posibles estados  que puede tener  un caso son 1: caso abierto, 2: caso  resuelto, 3: cerrado sin resolución.</p>
+<p>Las fechas se encuentran en el formato YYYY-MM-DD. Por otro lado el comisionado Gordon guarda un registro detallado sobre en cuáles casos fue activada la batiseñal para 
+pedir ayuda del vigilante, Batman. Esta información se encuentra en un Dataframe con el siguiente formato (id_caso, respuesta), siendo campo respuesta si la señal tuvo una respu
+esta positiva (1) o negativa (0) de parte de él.</p>
+<p>El  sector  encargado  de  las  estadísticas  oficiales  del  GCPD  quiere  con  esta  información  analizar  las  siguientes situaciones:</p>
+<ul>
+<li>Tasa de resolución de casos de la fuerza policial por categoría de caso (considerando aquellos casos en los que no participó Batman). </li>
+</ul>
+<hr>
 
 </div>
 </div>
@@ -13153,16 +13150,14 @@ método de agregación.</p>
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="k">import</span> <span class="n">SparkContext</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
-<span class="kn">import</span> <span class="nn">wikipedia</span> <span class="k">as</span> <span class="nn">wp</span>
-<span class="kn">from</span> <span class="nn">string</span> <span class="k">import</span> <span class="n">punctuation</span>
-<span class="kn">from</span> <span class="nn">re</span> <span class="k">import</span> <span class="n">sub</span>
-<span class="n">wp</span><span class="o">.</span><span class="n">set_lang</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
-<span class="n">articulo1</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s2">&quot;Zimbawe&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">summary</span>
-<span class="n">articulo2</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s2">&quot;Camboya&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">summary</span>
-<span class="n">articulo3</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s2">&quot;Djibouti&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">summary</span>
-<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([</span><span class="n">articulo1</span><span class="p">,</span><span class="n">articulo2</span><span class="p">,</span><span class="n">articulo3</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Set-up y vista rápida de las dos bases de datos truchas</span>
+<span class="kn">import</span> <span class="nn">pyspark</span>
+
+<span class="n">spark</span> <span class="o">=</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;Batman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">df_gcpd</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s1">&#39;../data/2018C1_GCPD.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df_gcpd</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s1">&#39;GCPD&#39;</span><span class="p">)</span>
+<span class="n">df_gordon</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s1">&#39;../data/2018C1_gordon.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df_gordon</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s1">&#39;GORDON&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13175,68 +13170,43 @@ método de agregación.</p>
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pattern</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="n">set_letras</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">set_letras</span><span class="p">:</span>
-            <span class="n">set_letras</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">set_letras</span><span class="p">)</span>
-        <span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">set_letras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span><span class="n">word</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT GCPD.categoria, (SUM(case when GCPD.estado_caso=2 then 1 else 0 end) / COUNT(GCPD.estado_caso)) as tasa_resolucion </span><span class="se">\</span>
+<span class="s2">        from GCPD left join GORDON on GCPD.id_caso = GORDON.id_caso </span><span class="se">\</span>
+<span class="s2">        where GORDON.respuesta=0 or GORDON.respuesta is null </span><span class="se">\</span>
+<span class="s2">        group by GCPD.categoria&quot;</span>
 
-<span class="k">def</span> <span class="nf">word_tokenizer</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="o">+</span><span class="n">punctuation</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">word_tokenizer</span><span class="p">)</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-<span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
-</div>
-</div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Previamente definimos la funcion <code>pattern</code> que devuelve una tupla con una secuencia numerica indicando el patron de la palabra y la palabra. La mapeamos al RDD, agrupamos por patron (clave). Eso nos deja un RDD con registros del tipo <code>&lt;patron, iterable de palabras&gt;</code>. Queremos la cantidad de palabras por patron, asi que con <code>len</code> obtenemos la cantidad.</p>
+<div class="output_area">
 
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+---------+------------------+
+|categoria|   tasa_resolucion|
++---------+------------------+
+|     Robo|0.3333333333333333|
+|   Arseny|               0.0|
+| Incendio|               0.0|
++---------+------------------+
+
+</pre>
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>rdd = rdd.map(pattern)
-rdd = rdd.groupByKey()
-rdd = rdd.mapValues(lambda x: len(x))
-rdd.collect()</p>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Otra forma podria haber sido usando <code>reduceByKey</code> para sumar, algo asi:</p>
 
-<pre><code>rdd = rdd.map(pattern)
-rdd = rdd.map(lambda x: (x[0],1)).reduceByKey(lambda x,y: x+y)
-rdd.collect()</code></pre>
-
-</div>
-</div>
 </div>
     </div>
   </div>

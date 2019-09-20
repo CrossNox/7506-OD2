@@ -13089,7 +13089,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13155,10 +13155,13 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">wikipedia</span> <span class="kn">as</span> <span class="nn">wp</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="k">import</span> <span class="n">SparkContext</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="kn">import</span> <span class="nn">wikipedia</span> <span class="k">as</span> <span class="nn">wp</span>
 <span class="n">wp</span><span class="o">.</span><span class="n">set_lang</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">string</span>
 </pre></div>
@@ -13170,10 +13173,10 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">letters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span><span class="p">)</span>\
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">letters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span><span class="p">)</span>\
     <span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">])</span>
 <span class="n">sampleText</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">wp</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s2">&quot;Alan turing&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
 <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">sampleText</span><span class="p">)</span>
@@ -13194,10 +13197,10 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13215,10 +13218,10 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">ngrams</span><span class="p">(</span><span class="n">element</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ngrams</span><span class="p">(</span><span class="n">element</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
     <span class="n">lis</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">splitted</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="p">):</span>
@@ -13241,10 +13244,10 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rdd1</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd1</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">rdd2</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">rdd3</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="n">rddf</span> <span class="o">=</span> <span class="n">rdd1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">rdd2</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">rdd3</span><span class="p">))</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
@@ -13265,15 +13268,54 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">rddf</span> <span class="o">=</span> <span class="n">rddf</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))),</span><span class="n">x</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rddf</span> <span class="o">=</span> <span class="n">rddf</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))),</span><span class="n">x</span><span class="p">))</span>
 <span class="n">rddf</span> <span class="o">=</span> <span class="n">rddf</span><span class="o">.</span><span class="n">groupByKey</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">rddf</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[11]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[&#39;codebreaking&#39;, &#39;code breaking&#39;],
+ [&#39;no&#39;, &#39;on&#39;],
+ [&#39;from&#39;, &#39;form&#39;],
+ [&#39;user&#39;, &#39;sure&#39;],
+ [&#39;denied&#39;, &#39;indeed&#39;],
+ [&#39;source&#39;, &#39;course&#39;],
+ [&#39;revised&#39;, &#39;diverse&#39;],
+ [&#39;was he&#39;, &#39;he was&#39;],
+ [&#39;the outside&#39;, &#39;outside the&#39;],
+ [&#39;and turing&#39;, &#39;turing and&#39;],
+ [&#39;he went&#39;, &#39;then we&#39;],
+ [&#39;mathematics and&#39;, &#39;and mathematics&#39;],
+ [&#39;and him&#39;, &#39;him and&#39;],
+ [&#39;have some&#39;, &#39;some have&#39;],
+ [&#39;from the&#39;, &#39;for them&#39;, &#39;the form&#39;],
+ [&#39;and other&#39;, &#39;other and&#39;],
+ [&#39;from students&#39;, &#39;students from&#39;],
+ [&#39;the day&#39;, &#39;day the&#39;],
+ [&#39;park the&#39;, &#39;the park&#39;],
+ [&#39;only the&#39;, &#39;the only&#39;]]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -13288,10 +13330,10 @@ puntuación.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">uniqueWords</span><span class="p">(</span><span class="n">ngrams</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">uniqueWords</span><span class="p">(</span><span class="n">ngrams</span><span class="p">):</span>
     <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ngrams</span><span class="p">:</span>
@@ -13306,6 +13348,124 @@ puntuación.</p>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[&#39;codebreaking&#39;, &#39;code breaking&#39;],
+ [&#39;no&#39;, &#39;on&#39;],
+ [&#39;from&#39;, &#39;form&#39;],
+ [&#39;user&#39;, &#39;sure&#39;],
+ [&#39;denied&#39;, &#39;indeed&#39;],
+ [&#39;source&#39;, &#39;course&#39;],
+ [&#39;revised&#39;, &#39;diverse&#39;],
+ [&#39;he went&#39;, &#39;then we&#39;],
+ [&#39;from the&#39;, &#39;for them&#39;, &#39;the form&#39;],
+ [&#39;turing papers&#39;, &#39;turings paper&#39;],
+ [&#39;on 31&#39;, &#39;on 13&#39;],
+ [&#39;13 march&#39;, &#39;31 march&#39;],
+ [&#39;smile&#39;, &#39;miles&#39;],
+ [&#39;another&#39;, &#39;heart on&#39;],
+ [&#39;area&#39;, &#39;are a&#39;],
+ [&#39;nsa&#39;, &#39;san&#39;],
+ [&#39;he turned&#39;, &#39;under the&#39;],
+ [&#39;14&#39;, &#39;41&#39;],
+ [&#39;things as&#39;, &#39;hastings&#39;],
+ [&#39;reserved&#39;, &#39;reversed&#39;],
+ [&#39;ian&#39;, &#39;in a&#39;],
+ [&#39;that is&#39;, &#39;at this&#39;],
+ [&#39;and recognised&#39;, &#39;second reading&#39;],
+ [&#39;how alan turing&#39;, &#39;alan turing who&#39;],
+ [&#39;i used to&#39;, &#39;outside&#39;],
+ [&#39;31&#39;, &#39;13&#39;],
+ [&#39;near&#39;, &#39;earn&#39;],
+ [&#39;late&#39;, &#39;et la&#39;],
+ [&#39;alter the&#39;, &#39;later the&#39;, &#39;the later&#39;],
+ [&#39;the cam&#39;, &#39;the acm&#39;],
+ [&#39;computersthe manchester&#39;, &#39;the manchester computers&#39;],
+ [&#39;of 14&#39;, &#39;of 41&#39;],
+ [&#39;appear on&#39;, &#39;a paper on&#39;],
+ [&#39;now&#39;, &#39;own&#39;, &#39;won&#39;],
+ [&#39;a set&#39;, &#39;east&#39;],
+ [&#39;12&#39;, &#39;21&#39;],
+ [&#39;disney&#39;, &#39;sidney&#39;],
+ [&#39;is no&#39;, &#39;in so&#39;],
+ [&#39;now as&#39;, &#39;was on&#39;, &#39;was no&#39;],
+ [&#39;heard of&#39;, &#39;head for&#39;],
+ [&#39;1945 and&#39;, &#39;1954 and&#39;],
+ [&#39;find a&#39;, &#39;and if&#39;],
+ [&#39;1945&#39;, &#39;1954&#39;],
+ [&#39;was&#39;, &#39;saw&#39;],
+ [&#39;alter&#39;, &#39;later&#39;],
+ [&#39;aim&#39;, &#39;i am&#39;],
+ [&#39;who&#39;, &#39;how&#39;],
+ [&#39;porter&#39;, &#39;report&#39;],
+ [&#39;2001&#39;, &#39;2010&#39;],
+ [&#39;had set&#39;, &#39;deaths&#39;],
+ [&#39;whether a&#39;, &#39;the war he&#39;],
+ [&#39;known to&#39;, &#39;not know&#39;],
+ [&#39;on 12&#39;, &#39;on 21&#39;],
+ [&#39;dna&#39;, &#39;and&#39;],
+ [&#39;acts&#39;, &#39;cats&#39;, &#39;cast&#39;],
+ [&#39;2012&#39;, &#39;1022&#39;],
+ [&#39;1938&#39;, &#39;1983&#39;],
+ [&#39;asa&#39;, &#39;as a&#39;],
+ [&#39;later to&#39;, &#39;to alter&#39;],
+ [&#39;the year&#39;, &#39;they are&#39;],
+ [&#39;tell it&#39;, &#39;little&#39;],
+ [&#39;cam&#39;, &#39;acm&#39;],
+ [&#39;testing&#39;, &#39;setting&#39;],
+ [&#39;appear&#39;, &#39;a paper&#39;],
+ [&#39;mentor&#39;, &#39;morten&#39;],
+ [&#39;two are&#39;, &#39;wrote a&#39;],
+ [&#39;and was&#39;, &#39;dna was&#39;],
+ [&#39;role of dna&#39;, &#39;and role of&#39;],
+ [&#39;me as&#39;, &#39;same&#39;],
+ [&#39;side&#39;, &#39;dies&#39;],
+ [&#39;theorem&#39;, &#39;the more&#39;],
+ [&#39;that now&#39;, &#39;than two&#39;],
+ [&#39;into a&#39;, &#39;it on a&#39;],
+ [&#39;de la&#39;, &#39;led a&#39;],
+ [&#39;in 2010&#39;, &#39;2001 in&#39;],
+ [&#39;it on&#39;, &#39;into&#39;],
+ [&#39;cannot&#39;, &#39;can not&#39;],
+ [&#39;on to&#39;, &#39;onto&#39;],
+ [&#39;broad&#39;, &#39;board&#39;],
+ [&#39;the cast&#39;, &#39;acts the&#39;],
+ [&#39;education&#39;, &#39;cautioned&#39;],
+ [&#39;left&#39;, &#39;felt&#39;],
+ [&#39;thing&#39;, &#39;night&#39;],
+ [&#39;plea&#39;, &#39;pale&#39;],
+ [&#39;it has&#39;, &#39;at his&#39;],
+ [&#39;not have&#39;, &#39;the nova&#39;],
+ [&#39;tons a&#39;, &#39;not as&#39;],
+ [&#39;it won&#39;, &#39;in two&#39;],
+ [&#39;a plea&#39;, &#39;a pale&#39;],
+ [&#39;on 31 march&#39;, &#39;on 13 march&#39;],
+ [&#39;three&#39;, &#39;there&#39;],
+ [&#39;soon&#39;, &#39;so on&#39;],
+ [&#39;arnold&#39;, &#39;ronald&#39;],
+ [&#39;signed&#39;, &#39;design&#39;],
+ [&#39;regal&#39;, &#39;large&#39;],
+ [&#39;and of&#39;, &#39;of dna&#39;],
+ [&#39;with an&#39;, &#39;in what&#39;],
+ [&#39;though the&#39;, &#39;he thought&#39;],
+ [&#39;a winston&#39;, &#39;was not in&#39;]]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 

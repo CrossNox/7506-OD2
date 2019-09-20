@@ -13089,7 +13089,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13154,10 +13154,13 @@ estos casos simplemente los consideramos neutros (score=0).<br>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">Quijote</span> <span class="o">=</span> <span class="s1">&#39;En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino.&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="k">import</span> <span class="n">SparkContext</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="n">Quijote</span> <span class="o">=</span> <span class="s1">&#39;En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino.&#39;</span>
 <span class="n">Dickens</span> <span class="o">=</span> <span class="s1">&#39;Las noches aqui son largas algunas veces, muy largas; pero nada son en comparacion con las inquietas noches y terribles ensueños de aquel tiempo. Su recuerdo me estremece. Grandes, sombríos fantasmas con maliciosos rostros se sentaban en los rincones de mi cuarto,y de noche se inclinaban sobre mi, incitándome á la locura. Me decian en voces atronadoras que el suelo de la antigua casa en que murió el padre de mi padre, estaba aun manchado de su sangre, derramada por su propia mano en el furor de su locura. Me cubria los oidos con las manos, pero me gritaban y me gritaban hasta que el cuarto se estremecia con sus acentos, y por todas partes oia que en la generacion anterior á la suya la locura durmió, pero que su abuelo habia vivido por años con sus manos entre grillos, para evitar que se hiciesen pedazos. Sabia que decian la verdad, lo sabia bien. Lo habia descubierto años hacia , aunque me lo quisieron ocultar.&#39;</span>
 <span class="n">Napoleon</span> <span class="o">=</span> <span class="s1">&#39;Nacido Napoleone di Buonaparte (Nabolione o Nabulione en corso), sólo un año después de que Francia comprara la isla de Córcega a la República de Génova.Napoleone, años después, cambió su nombre por el afrancesado Napoléon Bonaparte. El registro más antiguo de este nombre aparece en un informe oficial fechado el 28 de marzo de 1796. Su familia formaba parte de la nobleza local. Su padre, Carlo Buonaparte, abogado, fue nombrado en 1778 representante de Córcega en la corte de Luis XVI, lugar donde permaneció por varios años, por lo que fue su madre, María Letizia Ramolino, la figura fundamental de su niñez&#39;</span>
 <span class="n">Agua</span> <span class="o">=</span> <span class="s1">&#39;El agua (del latín aqua) es una sustancia cuya molécula está formada por dos átomos de hidrógeno y uno de oxígeno (H2O). Es esencial para la supervivencia de todas las formas conocidas de vida. El término agua generalmente se refiere a la sustancia en su estado líquido, aunque la misma puede hallarse en su forma sólida llamada hielo, y en su forma gaseosa denominada vapor. El agua cubre el 71</span><span class="si">% d</span><span class="s1">e la superficie de la corteza terrestre.2 Se localiza principalmente en los océanos donde se concentra el 96,5</span><span class="si">% d</span><span class="s1">el agua total, los glaciares y casquetes polares poseen el 1,74%, los depósitos subterráneos (acuíferos), los permafrost y los glaciares continentales suponen el 1,72% y el restante 0,04</span><span class="si">% s</span><span class="s1">e reparte en orden decreciente entre lagos, humedad del suelo, atmósfera, embalses, ríos y seres vivos.&#39;</span>
@@ -13190,10 +13193,10 @@ Teniendo estos dos RDDs acomodados, podemos hacer un join por palabras. Nos qued
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">Palabras</span> <span class="o">=</span> <span class="n">Documentos</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="mi">1</span><span class="p">),</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Palabras</span> <span class="o">=</span> <span class="n">Documentos</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="mi">1</span><span class="p">),</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
 <span class="n">Palabras</span> <span class="o">=</span> <span class="n">Palabras</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
 <span class="n">Puntos</span> <span class="o">=</span> <span class="n">Puntajes</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
 <span class="n">Scores</span> <span class="o">=</span> <span class="n">Palabras</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Puntos</span><span class="p">)</span>
@@ -13201,6 +13204,26 @@ Teniendo estos dos RDDs acomodados, podemos hacer un join por palabras. Nos qued
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;antiguo&#39;, ((5, 1), (1, 2)))]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -13216,15 +13239,44 @@ Luego de ello, solo le damos el formato pedido.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">Scores</span> <span class="o">=</span> <span class="n">Scores</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Scores</span> <span class="o">=</span> <span class="n">Scores</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
 <span class="n">Scores</span> <span class="o">=</span> <span class="n">Scores</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],))</span>
 <span class="n">Scores</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(1, 5, 2),
+ (1, 3, 4),
+ (2, 6, 3),
+ (3, 1, 0),
+ (2, 5, -1),
+ (2, 4, -1),
+ (2, 3, -4),
+ (2, 2, -6),
+ (3, 6, 0),
+ (2, 1, -1)]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 

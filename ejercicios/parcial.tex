@@ -654,7 +654,7 @@
         Hay que buscar r y b de forma tal que $1 - ((1-0.7^r)^b)$ sea >= 0.9 y $1-((1-0.3^r)^b)$ sea <= 0.2 la cantidad de funciones de hashing es r*b. Una forma de hacer esto mas o menos logica es ir probando con r=b a partir de 2... ya que la amplificacion que queremos es similar en ambas probabilidades. Si usan una cantidad de funciones de hashing insolita (400 o mas) descuento de 5 puntos. 
     \end{criterio}
 
-    Estamos queriendo armar \textit{LSH(0.7;0.5;0.9;0.3)}, es decir, el LSH que si la distancia entre los docs es menor a 0.7 haya un 0.9 de probabilidad de encontrarlos, y si están alejados a 0.5 o más (más alejados equivale menor semejanza) la probabilidad de que sean candidatos sea menor a 0.3.
+    Estamos queriendo armar \textit{LSH(0.7;0.5;0.9;0.3)}, es decir, el LSH que si la distancia entre los docs es menor a 0.7 haya un 0.9 de probabilidad de encontrarlos, y si están alejados a 0.5 o más (más alejados equivale menor semejanza) la probabilidad de que sean candidatos sea menor a 0.3. Acá, con J(D1,D2) se refiere a la semejanza de Jaccard.
     
     Como dice el criterio. Sabemos que la probabilidad de candidatura a semejanza es $$P_{r,b} = 1 - (1 - P^r)^b$$ Entonces, buscamos el r y b tal que se cumplan las dos ecuaciones $$1 - (1 - 0.7^r)^b \geq 0.9$$ $$1 - (1 - 0.5^r)^b \leq 0.3$$
 

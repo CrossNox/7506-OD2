@@ -24,6 +24,9 @@ conda install --yes --file requirements.txt
 nbstripout --install
 ```
 
+### Guia de instalacion de Spark
+[Aca](https://github.com/CrossNox/7506-OD2/wiki/Spark) hay una guia que no estaba documentada.
+
 ### Como envio mis resueltos?
 * Forkea el repo
 * Escribí el resuelto en un notebook que contenga el enunciado y explicaciones acordes
